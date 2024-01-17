@@ -22,13 +22,12 @@ public abstract class BaseUnit : MonoBehaviour
     }
 
 
-    [SerializeField] private StatSO stats;
+    [SerializeField] protected StatSO stats;
     [Space]
     [SerializeField] private UnitView unitView;
     [SerializeField] private Vector2Int moveDirection = new Vector2Int(1, 0);
     [Space]
     public UnityEvent<UnitState> OnStateChanged;
-    public UnityEvent<bool> OnLockStateChanged;
 
     private Transform t;
     private Rigidbody2D rb;
@@ -37,7 +36,8 @@ public abstract class BaseUnit : MonoBehaviour
     private Vector2Int currentMoveDirection = Vector2Int.zero;
     private bool hasAttacked = false;
     private float timeBtwAttacks = 0;
-    private SerializableDictionary<StatEnum, float> instanceStats;
+
+    private float lifePoints;
 
     public StatSO GetStat() => stats;
 
@@ -45,7 +45,7 @@ public abstract class BaseUnit : MonoBehaviour
     {
         t = transform;
         rb = GetComponent<Rigidbody2D>();
-        instanceStats = stats.InstanceStats;
+        lifePoints = stats.GetValue(StatEnum.LifePoints);
     }
 
     private void Update()
@@ -58,18 +58,22 @@ public abstract class BaseUnit : MonoBehaviour
 
     private void HandleStates()
     {
-        if (stats.GetValue(StatEnum.LifePoints) <= 0 && currentState != UnitState.dead)
+        if (lifePoints <= 0 && currentState != UnitState.dead)
         {
             currentState = UnitState.dead;
             OnStateChanged?.Invoke(currentState);
+            GetComponent<Collider2D>().enabled = false;
+            this.enabled = false;
             return;
         }
+
 
         RaycastHit2D info = Physics2D.Raycast(unitView.viewPoint.position, unitView.viewPoint.right, unitView.viewDistance, unitView.viewLayer);
 
         if (!info)
         {
-            currentState = UnitState.run;
+            if(!hasAttacked)
+                currentState = UnitState.run;
         }
         else if(info.transform.TryGetComponent<BaseUnit>(out BaseUnit otherUnit))
         {
@@ -80,6 +84,7 @@ public abstract class BaseUnit : MonoBehaviour
                     currentState = UnitState.attacking;
                     hasAttacked = true;
                     timeBtwAttacks = Time.time + 1f / stats.GetValue(StatEnum.AttackRate);
+                    HandleAttack(otherUnit);
                     Invoke(nameof(ResetAttacks), 0.9f);
                 }
                 else
@@ -106,7 +111,7 @@ public abstract class BaseUnit : MonoBehaviour
         hasAttacked = false;
     }
 
-    public abstract void HandleAttack();
+    public abstract void HandleAttack(BaseUnit otherUnit);
 
     private void HandleMovement()
     {
@@ -135,9 +140,6 @@ public abstract class BaseUnit : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
-        instanceStats.TryGetValue(StatEnum.LifePoints, out float value);
-        value -= amount;
-        instanceStats.TrySetValue(StatEnum.LifePoints, value);
-
+        lifePoints -= amount;
     }
 }
