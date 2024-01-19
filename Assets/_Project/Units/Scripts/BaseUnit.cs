@@ -72,13 +72,15 @@ public abstract class BaseUnit : MonoBehaviour
         {
             currentState = UnitState.dead;
             OnStateChanged?.Invoke(currentState);
+            currentMoveDirection = Vector2Int.zero;
+            moveDirection = Vector2Int.zero;
             GetComponent<Collider2D>().enabled = false;
-            this.enabled = false;
+            //this.enabled = false;
             return;
         }
 
 
-        RaycastHit2D info = Physics2D.Raycast(unitView.viewPoint.position, unitView.viewPoint.right, unitView.viewDistance, unitView.viewLayer);
+        RaycastHit2D info = Physics2D.Raycast(unitView.viewPoint.position, t.right, unitView.viewDistance, unitView.viewLayer);
 
         if (!info)
         {
@@ -131,6 +133,12 @@ public abstract class BaseUnit : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(currentState == UnitState.dead)
+        {
+            rb.velocity = Vector2.zero;
+            return;
+        }
+
         rb.velocity = new Vector2(currentMoveDirection.x * stats.GetValue(StatEnum.MoveSpeed), rb.velocity.y);
     }
 
@@ -138,7 +146,7 @@ public abstract class BaseUnit : MonoBehaviour
     {
         if (unitView.viewPoint == null) return;
         Gizmos.color = Color.red;
-        Vector3 endPoint = unitView.viewPoint.position + new Vector3(unitView.viewDistance, 0, 0);
+        Vector3 endPoint = unitView.viewPoint.position + new Vector3(unitView.viewDistance * transform.right.x, 0, 0);
         Gizmos.DrawLine(unitView.viewPoint.position, endPoint);
     }
 
