@@ -25,6 +25,7 @@ public abstract class BaseUnit : MonoBehaviour
     [SerializeField] protected StatSO stats;
     [Space]
     [SerializeField] private UnitView unitView;
+    [SerializeField] private float freezeTimeInAttack = 0.9f;
     [SerializeField] private Vector2Int moveDirection = new Vector2Int(1, 0);
     [Space]
     public UnityEvent<UnitState> OnStateChanged;
@@ -36,8 +37,17 @@ public abstract class BaseUnit : MonoBehaviour
     private Vector2Int currentMoveDirection = Vector2Int.zero;
     private bool hasAttacked = false;
     private float timeBtwAttacks = 0;
-
     private float lifePoints;
+
+    public Vector2Int MoveDirection 
+    { 
+        get => moveDirection;
+        set
+        {
+            moveDirection = value;
+            currentMoveDirection = value;
+        }
+    }
 
     public StatSO GetStat() => stats;
 
@@ -77,20 +87,13 @@ public abstract class BaseUnit : MonoBehaviour
         }
         else if(info.transform.TryGetComponent<BaseUnit>(out BaseUnit otherUnit))
         {
-            if (!hasAttacked)
+            if (!hasAttacked && Time.time >= timeBtwAttacks)
             {
-                if(timeBtwAttacks <= Time.time)
-                {
-                    currentState = UnitState.attacking;
-                    hasAttacked = true;
-                    timeBtwAttacks = Time.time + 1f / stats.GetValue(StatEnum.AttackRate);
-                    HandleAttack(otherUnit);
-                    Invoke(nameof(ResetAttacks), 0.9f);
-                }
-                else
-                {
-                    currentState = UnitState.idle;
-                }
+                currentState = UnitState.attacking;
+                hasAttacked = true;
+                timeBtwAttacks = Time.time + 1f / stats.GetValue(StatEnum.AttackRate);
+                HandleAttack(otherUnit);
+                Invoke(nameof(ResetAttacks), freezeTimeInAttack);
             }
         }
         else 
@@ -109,6 +112,7 @@ public abstract class BaseUnit : MonoBehaviour
     private void ResetAttacks()
     {
         hasAttacked = false;
+        currentState = UnitState.idle;
     }
 
     public abstract void HandleAttack(BaseUnit otherUnit);
