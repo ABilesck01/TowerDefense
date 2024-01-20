@@ -21,13 +21,7 @@ public abstract class MoveUnit : BaseUnit
     {
         if (lifePoints <= 0 && currentState != UnitState.dead)
         {
-            currentState = UnitState.dead;
-            OnStateChanged?.Invoke(currentState);
-            currentMoveDirection = Vector2Int.zero;
-            moveDirection = Vector2Int.zero;
-            GetComponent<Collider2D>().enabled = false;
-            GetComponentInChildren<SpriteRenderer>().sortingOrder = -1;
-            Destroy(gameObject, 2f);
+            HandleUnitDeath();
             return;
         }
 
@@ -57,7 +51,6 @@ public abstract class MoveUnit : BaseUnit
 
         if (currentState != lastState)
         {
-            Debug.Log(currentState);
             lastState = currentState;
             OnStateChanged?.Invoke(currentState);
         }

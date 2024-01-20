@@ -28,6 +28,7 @@ public abstract class BaseUnit : MonoBehaviour
     [SerializeField] protected float freezeTimeInAttack = 0.9f;
     [Space]
     public UnityEvent<UnitState> OnStateChanged;
+    public UnityEvent<BaseUnit> OnUnitDeath;
 
     protected Transform t;
     protected Rigidbody2D rb;
@@ -61,12 +62,7 @@ public abstract class BaseUnit : MonoBehaviour
     {
         if (lifePoints <= 0 && currentState != UnitState.dead)
         {
-            currentState = UnitState.dead;
-            OnStateChanged?.Invoke(currentState);
-            currentMoveDirection = Vector2Int.zero;
-            GetComponent<Collider2D>().enabled = false;
-            GetComponentInChildren<SpriteRenderer>().sortingOrder = -1;
-            Destroy(gameObject, 2f);
+            HandleUnitDeath();
             return;
         }
 
@@ -95,6 +91,17 @@ public abstract class BaseUnit : MonoBehaviour
             lastState = currentState;
             OnStateChanged?.Invoke(currentState);
         }
+    }
+
+    protected void HandleUnitDeath()
+    {
+        currentState = UnitState.dead;
+        OnStateChanged?.Invoke(currentState);
+        OnUnitDeath?.Invoke(this);
+        currentMoveDirection = Vector2Int.zero;
+        GetComponent<Collider2D>().enabled = false;
+        GetComponentInChildren<SpriteRenderer>().sortingOrder = -1;
+        Destroy(gameObject, 2f);
     }
 
     protected void ResetAttacks()

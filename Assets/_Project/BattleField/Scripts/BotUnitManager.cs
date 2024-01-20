@@ -7,9 +7,20 @@ public class BotUnitManager : UnitManager
     [SerializeField] private float timeToSpawn = 1.33f;
 
     private float nextTimeToSpawn;
+    private bool canSpawn = true;
+
+    private void Start()
+    {
+        GameManager.instance.OnFinishRound.AddListener(OnFinishRound);
+        GameManager.instance.OnNextRound.AddListener(OnNextRound);
+    }
+
+    
 
     protected override void HandlePlaceUnit()
     {
+        if (!canSpawn) return;
+
         nextTimeToSpawn -= Time.deltaTime;
 
         if(nextTimeToSpawn < 0)
@@ -24,7 +35,27 @@ public class BotUnitManager : UnitManager
     {
         Transform spawn = moveUnitSpawnPoints[Random.Range(0, moveUnitSpawnPoints.Length)].transform;
 
-        Instantiate(unitToPlace, spawn.position, spawn.rotation);
+        var unit = Instantiate(unitToPlace, spawn.position, spawn.rotation);
+        unit.OnUnitDeath.AddListener(OnUnitDeath);
         unitToPlace = null;
+
+    }
+
+    private void OnUnitDeath(BaseUnit unit)
+    {
+        GameManager.instance.AddXp(unit.GetStat());
+    }
+
+    private void OnFinishRound()
+    {
+        canSpawn = false;
+    }
+
+    private void OnNextRound()
+    {
+        canSpawn = true;
+        timeToSpawn *= 0.9f;
+        if (timeToSpawn < 0.3)
+            timeToSpawn = 0.3f;
     }
 }

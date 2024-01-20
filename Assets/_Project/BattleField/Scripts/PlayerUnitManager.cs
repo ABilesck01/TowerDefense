@@ -27,7 +27,8 @@ public class PlayerUnitManager : UnitManager
     }
 
     private void Start()
-    { 
+    {
+        txtGold.text = ((int)gold).ToString();
         lifePoints = stats.GetValue(StatEnum.LifePoints);
         healthBar.maxValue = lifePoints;
         healthBar.value = lifePoints;
