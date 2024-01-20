@@ -24,30 +24,21 @@ public abstract class BaseUnit : MonoBehaviour
 
     [SerializeField] protected StatSO stats;
     [Space]
-    [SerializeField] private UnitView unitView;
-    [SerializeField] private float freezeTimeInAttack = 0.9f;
-    [SerializeField] private Vector2Int moveDirection = new Vector2Int(1, 0);
+    [SerializeField] protected UnitView unitView;
+    [SerializeField] protected float freezeTimeInAttack = 0.9f;
     [Space]
     public UnityEvent<UnitState> OnStateChanged;
 
-    private Transform t;
-    private Rigidbody2D rb;
-    private UnitState currentState;
-    private UnitState lastState;
-    private Vector2Int currentMoveDirection = Vector2Int.zero;
-    private bool hasAttacked = false;
-    private float timeBtwAttacks = 0;
-    private float lifePoints;
+    protected Transform t;
+    protected Rigidbody2D rb;
+    protected UnitState currentState;
+    protected UnitState lastState;
+    protected Vector2Int currentMoveDirection = Vector2Int.zero;
+    protected bool hasAttacked = false;
+    protected float timeBtwAttacks = 0;
+    protected float lifePoints;
 
-    public Vector2Int MoveDirection 
-    { 
-        get => moveDirection;
-        set
-        {
-            moveDirection = value;
-            currentMoveDirection = value;
-        }
-    }
+    
 
     public StatSO GetStat() => stats;
 
@@ -58,34 +49,31 @@ public abstract class BaseUnit : MonoBehaviour
         lifePoints = stats.GetValue(StatEnum.LifePoints);
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (currentState == UnitState.dead) return;
 
         HandleStates();
-        HandleMovement();
+        //HandleMovement();
     }
 
-    private void HandleStates()
+    protected virtual void HandleStates()
     {
         if (lifePoints <= 0 && currentState != UnitState.dead)
         {
             currentState = UnitState.dead;
             OnStateChanged?.Invoke(currentState);
             currentMoveDirection = Vector2Int.zero;
-            moveDirection = Vector2Int.zero;
             GetComponent<Collider2D>().enabled = false;
-            //this.enabled = false;
             return;
         }
 
 
         RaycastHit2D info = Physics2D.Raycast(unitView.viewPoint.position, t.right, unitView.viewDistance, unitView.viewLayer);
 
-        if (!info)
+        if(!info)
         {
-            if(!hasAttacked)
-                currentState = UnitState.run;
+            currentState = UnitState.idle;
         }
         else if(info.transform.TryGetComponent<BaseUnit>(out BaseUnit otherUnit))
         {
@@ -98,10 +86,6 @@ public abstract class BaseUnit : MonoBehaviour
                 Invoke(nameof(ResetAttacks), freezeTimeInAttack);
             }
         }
-        else 
-        {
-            currentState = UnitState.idle;
-        }
 
         if(currentState != lastState)
         {
@@ -111,36 +95,13 @@ public abstract class BaseUnit : MonoBehaviour
         }
     }
 
-    private void ResetAttacks()
+    protected void ResetAttacks()
     {
         hasAttacked = false;
         currentState = UnitState.idle;
     }
 
     public abstract void HandleAttack(BaseUnit otherUnit);
-
-    private void HandleMovement()
-    {
-        if (currentState == UnitState.run)
-        {
-            currentMoveDirection = moveDirection;
-        }
-        else
-        {
-            currentMoveDirection = Vector2Int.zero;
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        if(currentState == UnitState.dead)
-        {
-            rb.velocity = Vector2.zero;
-            return;
-        }
-
-        rb.velocity = new Vector2(currentMoveDirection.x * stats.GetValue(StatEnum.MoveSpeed), rb.velocity.y);
-    }
 
     private void OnDrawGizmosSelected()
     {
@@ -153,5 +114,10 @@ public abstract class BaseUnit : MonoBehaviour
     public void TakeDamage(float amount)
     {
         lifePoints -= amount;
+    }
+
+    public float GetUnitCost()
+    {
+        return stats.GetValue(StatEnum.Cost);
     }
 }

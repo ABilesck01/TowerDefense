@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RangedUnit : BaseUnit
+public class RangedUnit : MoveUnit
 {
     [Header("Ranged")]
     [SerializeField] private Transform shootPosition;

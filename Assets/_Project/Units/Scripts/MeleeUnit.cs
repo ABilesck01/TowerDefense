@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeleeUnit : BaseUnit
+public class MeleeUnit : MoveUnit
 {
     public override void HandleAttack(BaseUnit otherUnit)
     {
