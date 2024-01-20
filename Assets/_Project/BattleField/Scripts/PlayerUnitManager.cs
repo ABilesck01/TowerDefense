@@ -99,6 +99,11 @@ public class PlayerUnitManager : UnitManager
             lifePoints -= unit.GetLifePoints();
             healthBar.value = lifePoints;
             Destroy(unit.gameObject);
+            if(lifePoints <= 0)
+            {
+                gold = 0;
+                GameManager.instance.GameOver();
+            }
         }
     }
 }

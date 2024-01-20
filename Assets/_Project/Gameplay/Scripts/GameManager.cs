@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     [Space]
     [SerializeField] private PlayerUnitManager player;
     [Space]
+    public UnityEvent OnGameOver;
     public UnityEvent OnFinishRound;
     public UnityEvent OnNextRound;
 
@@ -57,5 +58,11 @@ public class GameManager : MonoBehaviour
         currentPoints = 0;
         xpSlider.value = 0;
         OnNextRound?.Invoke();
+    }
+
+    public void GameOver()
+    {
+        Invoke(nameof(ClearAllUnits), 1.5f);
+        OnGameOver?.Invoke();
     }
 }
