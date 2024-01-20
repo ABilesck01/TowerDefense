@@ -26,6 +26,8 @@ public abstract class MoveUnit : BaseUnit
             currentMoveDirection = Vector2Int.zero;
             moveDirection = Vector2Int.zero;
             GetComponent<Collider2D>().enabled = false;
+            GetComponentInChildren<SpriteRenderer>().sortingOrder = -1;
+            Destroy(gameObject, 2f);
             return;
         }
 

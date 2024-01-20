@@ -125,7 +125,6 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 64
   freezeTimeInAttack: 0.9
-  moveDirection: {x: 1, y: 0}
   OnStateChanged:
     m_PersistentCalls:
       m_Calls:
@@ -141,6 +140,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  moveDirection: {x: 1, y: 0}
 --- !u!1 &4256176420120269378
 GameObject:
   m_ObjectHideFlags: 0
@@ -242,7 +242,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: c2faef4f75f65ab47897fc6eca50ac9e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

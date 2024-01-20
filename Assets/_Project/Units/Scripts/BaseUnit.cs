@@ -38,7 +38,7 @@ public abstract class BaseUnit : MonoBehaviour
     protected float timeBtwAttacks = 0;
     protected float lifePoints;
 
-    
+    public float GetLifePoints() => lifePoints;
 
     public StatSO GetStat() => stats;
 
@@ -65,6 +65,8 @@ public abstract class BaseUnit : MonoBehaviour
             OnStateChanged?.Invoke(currentState);
             currentMoveDirection = Vector2Int.zero;
             GetComponent<Collider2D>().enabled = false;
+            GetComponentInChildren<SpriteRenderer>().sortingOrder = -1;
+            Destroy(gameObject, 2f);
             return;
         }
 
