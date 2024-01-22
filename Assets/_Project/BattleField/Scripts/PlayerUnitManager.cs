@@ -35,7 +35,7 @@ public class PlayerUnitManager : UnitManager
         healthBar.value = lifePoints;
 
         allUnits.Clear();
-        foreach (UnitData unit in CampController.gameData.OwnedUnits)
+        foreach (UnitData unit in CampController.instance.gameData.OwnedUnits)
         {
             allUnits.Add(unit);
         }

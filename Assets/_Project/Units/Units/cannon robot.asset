@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: cannon robot
   m_EditorClassIdentifier: 
   unitName: Cannon Robot
-  unlockCost: 5
+  unlockCost: 200
   upgradeCost: 75
   icon: {fileID: 21300000, guid: 716c00a698884f94f8e8460760e0733f, type: 3}
   unitInWorld: {fileID: 1748992759989855428, guid: 1a459d22b494d5745b3424d93c7beb6e, type: 3}
+  possibleUpgrades:
+  - {fileID: 11400000, guid: fa0ccc225c275284fa2228b2485f6d41, type: 2}
+  - {fileID: 11400000, guid: df49c1ae1d695fb449e5cb421bdceccb, type: 2}
+  - {fileID: 11400000, guid: 7767b0a1530c2dd4fb03d942aa29b5e9, type: 2}

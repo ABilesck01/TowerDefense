@@ -17,3 +17,7 @@ MonoBehaviour:
   upgradeCost: 50
   icon: {fileID: 21300000, guid: 62c7360030fe9b248a825955e8c45c1b, type: 3}
   unitInWorld: {fileID: 5933480032177144013, guid: 44e418b685b3fea409b4631242b5a0ac, type: 3}
+  possibleUpgrades:
+  - {fileID: 11400000, guid: fa0ccc225c275284fa2228b2485f6d41, type: 2}
+  - {fileID: 11400000, guid: df49c1ae1d695fb449e5cb421bdceccb, type: 2}
+  - {fileID: 11400000, guid: 7767b0a1530c2dd4fb03d942aa29b5e9, type: 2}

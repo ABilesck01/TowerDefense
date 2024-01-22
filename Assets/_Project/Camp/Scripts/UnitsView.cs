@@ -18,7 +18,7 @@ public class UnitsView : MonoBehaviour
             Destroy(item.gameObject);
         }
 
-        List<UnitData> ownedUnits = CampController.gameData.OwnedUnits;
+        List<UnitData> ownedUnits = CampController.instance.gameData.OwnedUnits;
         foreach (UnitData unitData in units)
         {
             UnitsViewItem newItem = Instantiate(itemPrefab, container);
@@ -40,22 +40,27 @@ public class UnitsView : MonoBehaviour
 
     private void UpgradeUnit(UnitData unit)
     {
-        if(CampController.gameData.Gold < unit.upgradeCost)
+        Debug.Log("upgrade unit");
+        float totalUpgradeCost = unit.upgradeCost * unit.GetStatSO().GetUnitLevel();
+        if(CampController.instance.gameData.Gold < totalUpgradeCost)
         {
             return;
         }
 
-        CampController.gameData.Gold -= unit.upgradeCost;
+        unit.Upgrade();
+        CampController.instance.RemoveGold(totalUpgradeCost);
+        Fill();
     }
 
     private void BuyUnit(UnitData unit)
     {
-        if (CampController.gameData.Gold < unit.unlockCost)
+        if (CampController.instance.gameData.Gold < unit.unlockCost)
         {
             return;
         }
 
-        CampController.gameData.OwnedUnits.Add(unit);
+        CampController.instance.RemoveGold(unit.unlockCost);
+        CampController.instance.AddUnit(unit);
         Fill();
     }
 }

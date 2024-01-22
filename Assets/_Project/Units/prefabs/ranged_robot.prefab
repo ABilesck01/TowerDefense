@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f7b5556b37d304ba97bbc5ab64140b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 11400000, guid: ef368a9fb056fc148b092e43d4363976, type: 2}
+  stats: {fileID: 11400000, guid: 998d1c078b199664a831181facd0d20b, type: 2}
   unitView:
     viewPoint: {fileID: 1748992760919491039}
     viewDistance: 2
@@ -140,6 +140,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnUnitDeath:
+    m_PersistentCalls:
+      m_Calls: []
   moveDirection: {x: 1, y: 0}
   shootPosition: {fileID: 1748992760919491039}
   bulletPrefab: {fileID: 2712625119437735059, guid: 79dc38ace81872349ba5cea1e27a97be, type: 3}

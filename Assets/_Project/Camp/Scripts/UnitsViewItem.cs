@@ -16,7 +16,8 @@ public class UnitsViewItem : MonoBehaviour
         txtName.text = unitData.unitName;
         icon.sprite = unitData.icon;
         txtButtonLabel.text = hasUnit ? "Upgrade" : "Unlock";
-        txtCost.text = hasUnit ? unitData.upgradeCost.ToString() : unitData.unlockCost.ToString();
+        float totalUpgradeCost = unitData.upgradeCost * unitData.GetStatSO().GetUnitLevel();
+        txtCost.text = hasUnit ? totalUpgradeCost.ToString() : unitData.unlockCost.ToString();
         button.onClick.AddListener(onClick);
     }
 }

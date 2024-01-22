@@ -1,47 +1,55 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class CampController : MonoBehaviour
 {
     public static readonly string sceneName = "Camp";
 
-    [SerializeField] private TextMeshProUGUI txtGold;
-    [SerializeField] private List<UnitData> initialUnits;
-    [SerializeField] private GameObject unitsPanel;
+    public static CampController instance;
 
-    public static GameData gameData;
-    private static float goldInCache = 0;
+    public GameData gameData;
 
-    private void Start()
+    public static event EventHandler OnGameDataChanged;
+
+    private void Awake()
     {
-        gameData = new GameData();
-
-        gameData.Gold += goldInCache;
-        goldInCache = 0;
-        txtGold.text = gameData.Gold.ToString();
-        gameData.OwnedUnits = initialUnits;
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    public static void AddGoldInCache(float amount)
+    private void OnApplicationQuit()
     {
-        goldInCache += amount;
-    }    
-
-    public void GoToBattle()
-    {
-        SceneManager.LoadScene("Gameplay");
+        foreach (UnitData item in gameData.OwnedUnits)
+        {
+            item.ClearUpgrades();
+        }
     }
 
-    public void ShowMyUnits()
+    public void AddGoldInCache(float amount)
     {
-        unitsPanel.SetActive(true);
+        gameData.Gold += amount;
+        OnGameDataChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public void HideMyUnits()
+    public void RemoveGold(float amount)
     {
-        unitsPanel.SetActive(false);
+        gameData.Gold -= amount;
+        OnGameDataChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void AddUnit(UnitData unit)
+    {
+        gameData.OwnedUnits.Add(unit);
+        OnGameDataChanged?.Invoke(this, EventArgs.Empty);
     }
 }

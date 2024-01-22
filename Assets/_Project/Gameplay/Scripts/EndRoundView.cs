@@ -22,7 +22,7 @@ public class EndRoundView : MonoBehaviour
     public void BackToCamp()
     {
         screen.SetActive(false);
-        CampController.AddGoldInCache(GameManager.instance.GetGold());
+        CampController.instance.AddGoldInCache(GameManager.instance.GetGold());
         SceneManager.LoadScene(CampController.sceneName);
     }
 
