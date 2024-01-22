@@ -8,7 +8,8 @@ public class PlayerUnitManager : UnitManager
 {
     [SerializeField] private StatSO stats;
 
-    [SerializeField] private Button[] unitButtons;
+    [SerializeField] private Transform buttonsContainer;
+    [SerializeField] private PlayerUnitManagerItem itemPrefab;
     [SerializeField] private TextMeshProUGUI txtGold;
     [Space]
     [SerializeField] private Slider healthBar;
@@ -33,14 +34,20 @@ public class PlayerUnitManager : UnitManager
         healthBar.maxValue = lifePoints;
         healthBar.value = lifePoints;
 
-        for (int i = 0; i < allUnits.Length; i++)
+        allUnits.Clear();
+        foreach (UnitData unit in CampController.gameData.OwnedUnits)
+        {
+            allUnits.Add(unit);
+        }
+
+        for (int i = 0; i < allUnits.Count; i++)
         {
             int index = i;
-            unitButtons[i].onClick.AddListener(() =>
+            var item = Instantiate(itemPrefab, buttonsContainer);
+            item.Fill(allUnits[index], () =>
             {
-                BuyUnit(allUnits[index]);
+                BuyUnit(allUnits[index].unitInWorld);
             });
-            unitButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = allUnits[i].name;
         }
     }
 

@@ -22,8 +22,8 @@ public class EndRoundView : MonoBehaviour
     public void BackToCamp()
     {
         screen.SetActive(false);
-        //sum money;
-        SceneManager.LoadScene("Camp");
+        CampController.AddGoldInCache(GameManager.instance.GetGold());
+        SceneManager.LoadScene(CampController.sceneName);
     }
 
 }

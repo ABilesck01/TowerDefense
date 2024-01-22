@@ -26,7 +26,7 @@ public class BotUnitManager : UnitManager
         if(nextTimeToSpawn < 0)
         {
             nextTimeToSpawn = timeToSpawn;
-            unitToPlace = allUnits[Random.Range(0, allUnits.Length)];
+            unitToPlace = allUnits[Random.Range(0, allUnits.Count - 1)].unitInWorld;
             PlaceUnit();
         }
     }

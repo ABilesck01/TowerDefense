@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class UnitManager : MonoBehaviour
 {
-	[SerializeField] protected BaseUnit[] allUnits;
+	[SerializeField] protected List<UnitData> allUnits;
 	[SerializeField] protected UnitSpawnPoint[] moveUnitSpawnPoints;
     
     protected BaseUnit unitToPlace;

@@ -30,6 +30,11 @@ public class GameManager : MonoBehaviour
         currentPoints = 0;
     }
 
+    public float GetGold()
+    {
+        return player.Gold;
+    }
+
     public void AddXp(StatSO unit)
     {
         currentPoints += unit.GetValue(StatEnum.Xp);

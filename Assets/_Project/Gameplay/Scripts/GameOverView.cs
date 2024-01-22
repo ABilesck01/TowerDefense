@@ -14,6 +14,6 @@ public class GameOverView : MonoBehaviour
 
     public void BackToCamp()
     {
-        SceneManager.LoadScene("Camp");
+        SceneManager.LoadScene(CampController.sceneName);
     }
 }
