@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Zombie
   unlockCost: 0
-  upgradeCost: 50
+  upgradeCost: 0
   icon: {fileID: 21300000, guid: 62c7360030fe9b248a825955e8c45c1b, type: 3}
   unitInWorld: {fileID: 5933480032177144013, guid: 44e418b685b3fea409b4631242b5a0ac, type: 3}
   possibleUpgrades:

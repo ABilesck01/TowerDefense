@@ -15,8 +15,6 @@ public class BotUnitManager : UnitManager
         GameManager.instance.OnNextRound.AddListener(OnNextRound);
     }
 
-    
-
     protected override void HandlePlaceUnit()
     {
         if (!canSpawn) return;
@@ -57,5 +55,13 @@ public class BotUnitManager : UnitManager
         timeToSpawn *= 0.9f;
         if (timeToSpawn < 0.3)
             timeToSpawn = 0.3f;
+    }
+
+    public void UpgradeUnits()
+    {
+        foreach (var unit in allUnits)
+        {
+            unit.Upgrade();
+        }
     }
 }

@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Slider xpSlider;
     [Space]
     [SerializeField] private PlayerUnitManager player;
+    [SerializeField] private BotUnitManager bot;
     [Space]
     public UnityEvent OnGameOver;
     public UnityEvent OnFinishRound;
@@ -18,6 +19,8 @@ public class GameManager : MonoBehaviour
     private float currentPoints;
 
     public static GameManager instance;
+
+    private int currentRound = 1;
 
     private void Awake()
     {
@@ -28,6 +31,7 @@ public class GameManager : MonoBehaviour
     {
         xpSlider.maxValue = pointsToWin;
         currentPoints = 0;
+        currentRound = 1;
     }
 
     public float GetGold()
@@ -58,10 +62,14 @@ public class GameManager : MonoBehaviour
 
     public void NextRound()
     {
+        currentRound++;
         pointsToWin *= 2;
         xpSlider.maxValue = pointsToWin;
         currentPoints = 0;
         xpSlider.value = 0;
+        if ((currentRound %= 2) == 0)
+            bot.UpgradeUnits();
+
         OnNextRound?.Invoke();
     }
 

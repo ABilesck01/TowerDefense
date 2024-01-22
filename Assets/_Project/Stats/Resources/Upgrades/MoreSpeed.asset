@@ -15,5 +15,5 @@ MonoBehaviour:
   statsToAply:
     values:
     - key: 4
-      value: 10
-  isPercentage: 0
+      value: 5
+  isPercentage: 1
