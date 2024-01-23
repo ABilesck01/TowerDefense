@@ -42,6 +42,7 @@ public class BotUnitManager : UnitManager
     private void OnUnitDeath(BaseUnit unit)
     {
         GameManager.instance.AddXp(unit.GetStat());
+        TextPopup.Create(unit.transform.position, $"+ {unit.GetStat().GetValue(StatEnum.Cost)}");
     }
 
     private void OnFinishRound()
