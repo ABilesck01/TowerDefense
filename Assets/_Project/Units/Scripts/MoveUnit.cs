@@ -73,14 +73,6 @@ public abstract class MoveUnit : BaseUnit
         HandleMovement();
     }
 
-    //private void Update()
-    //{
-    //    if (currentState == UnitState.dead) return;
-
-    //    HandleStates();
-    //    HandleMovement();
-    //}
-
     private void FixedUpdate()
     {
         if (currentState == UnitState.dead)

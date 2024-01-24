@@ -6,8 +6,10 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Stats/New Stat")]
 public class StatSO : ScriptableObject
 {
-    [SerializeField, Tooltip("stats that are shared for each entity instancianted")] private SerializableDictionary<StatEnum, float> stats;
+    [SerializeField, Tooltip("stats that are shared for each entity instancianted")] 
+    private SerializableDictionary<StatEnum, float> stats;
     [SerializeField] private List<UpgradeSO> upgrades;
+    
     public float GetValue(StatEnum stat)
     {
         if(stats.TryGetValue(stat, out var value)) 

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,6 +19,7 @@ public abstract class BaseUnit : MonoBehaviour
         dead
     }
 
+    #region variables
 
     [SerializeField] protected StatSO stats;
     [Space]
@@ -39,9 +38,20 @@ public abstract class BaseUnit : MonoBehaviour
     protected float timeBtwAttacks = 0;
     protected float lifePoints;
 
+    #endregion
+
+    #region Getters
+
     public float GetLifePoints() => lifePoints;
 
     public StatSO GetStat() => stats;
+
+    public float GetUnitCost()
+    {
+        return stats.GetValue(StatEnum.Cost);
+    }
+
+    #endregion
 
     private void Awake()
     {
@@ -55,7 +65,6 @@ public abstract class BaseUnit : MonoBehaviour
         if (currentState == UnitState.dead) return;
 
         HandleStates();
-        //HandleMovement();
     }
 
     protected virtual void HandleStates()
@@ -123,10 +132,5 @@ public abstract class BaseUnit : MonoBehaviour
     public void TakeDamage(float amount)
     {
         lifePoints -= amount;
-    }
-
-    public float GetUnitCost()
-    {
-        return stats.GetValue(StatEnum.Cost);
     }
 }
